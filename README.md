@@ -12,4 +12,8 @@ npx hardhat test
 npx hardhat node
 node scripts/sample-script.js
 npx hardhat help
+# 忽略node版本的兼容问题，一般都是安装最新的，但有的包可能需要旧的的node
+yarn config set ignore-engines true
+yarn add  @openzeppelin/contracts
+yarn add @chakra-ui/react @emotion/react @emotion/styled framer-motion
 ```
