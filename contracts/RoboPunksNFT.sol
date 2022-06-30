@@ -7,17 +7,18 @@ contract RoboPunksNFT is ERC721, Ownable {
     uint256 public mintPrice;
     uint256 public totalSupply;
     uint256 public maxSupply;
-    uint256 public maxPreWallet;
+    uint256 public maxPerWallet;
     bool public isPublicMintEnabled;
     string internal baseTokenUri;
     address payable public withdrawWallet;
     mapping(address => uint256) public walletMints;
 
-    constructor() payable ERC721("RoboPunks", "RP") {
+    constructor() payable ERC721('RoboPunks', 'RP') {
         mintPrice = 0.02 ether;
         totalSupply = 0;
         maxSupply = 1000;
-        maxPreWallet = 3;
+        maxPerWallet = 3;
+        //set withdraw wallet address
     }
 
     function setIsPublicMintEnabled(bool isPublicMintEnabled_)
@@ -37,7 +38,7 @@ contract RoboPunksNFT is ERC721, Ownable {
         override
         returns (string memory)
     {
-        require(_exists(tokenId_));
+        require(_exists(tokenId_), 'Token does not exist!');
         return
             string(
                 abi.encodePacked(
@@ -49,7 +50,7 @@ contract RoboPunksNFT is ERC721, Ownable {
     }
 
     function withdraw() external onlyOwner {
-        (bool succes, ) = withdrawWallet.call{value: address(this).balance}("");
+        (bool succes, ) = withdrawWallet.call{value: address(this).balance}('');
         require(succes, "withdraw failed");
     }
 
@@ -58,7 +59,7 @@ contract RoboPunksNFT is ERC721, Ownable {
         require(msg.value == quantity_ * mintPrice, "wrong mint value");
         require(totalSupply + quantity_ <= maxSupply, "sold out");
         require(
-            walletMints[msg.sender] + quantity_ <= maxPreWallet,
+            walletMints[msg.sender] + quantity_ <= maxPerWallet,
             "exced max wallet"
         );
 

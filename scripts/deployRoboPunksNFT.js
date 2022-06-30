@@ -15,7 +15,7 @@ async function main() {
 
   // We get the contract to deploy
   const RoboPunksNFT = await hre.ethers.getContractFactory("RoboPunksNFT");
-  const roboPunksNFT = await RoboPunksNFT.deploy("Hello, Hardhat!");
+  const roboPunksNFT = await RoboPunksNFT.deploy();
 
   await roboPunksNFT.deployed();
 

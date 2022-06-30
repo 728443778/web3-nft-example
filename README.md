@@ -16,4 +16,7 @@ npx hardhat help
 yarn config set ignore-engines true
 yarn add  @openzeppelin/contracts
 yarn add @chakra-ui/react @emotion/react @emotion/styled framer-motion
+npx hardhat clean
+npx hardhat compile
+npx hardhat run .\scripts\deployRoboPunksNFT.js --network ropsten
 ```
