@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ethers, BigNumber } from "ethers";
 import roboPunksNFT from './RoboPunksNFT.json'
+import { Box, Button, Flex, Input, Text } from "@chakra-ui/react";
 const roboPunksNftAddress = "0x5a6C401fFEd5d713A7431e9E058c754939d82d8b";
 
 const MainMint = ({ accounts, setAccounts }) => {
@@ -16,7 +17,11 @@ const MainMint = ({ accounts, setAccounts }) => {
                 signer
             );
             try {
-                const response = await contract.mint(BigNumber.from(mintAmount));
+                const mintValue = ethers.utils.parseEther((0.02 * mintAmount).toString());
+                console.log("mintValue:", mintValue)
+                const response = await contract.mint(BigNumber.from(mintAmount), {
+                    value: mintValue
+                });
                 console.log('response:', response);
 
 
@@ -29,34 +34,94 @@ const MainMint = ({ accounts, setAccounts }) => {
 
     const handleDecrement = () => {
         if (mintAmount <= 1) return;
-        setMintAmount(mintAmount -1);
+        setMintAmount(mintAmount - 1);
     }
 
-    const handleIncrement = ()=>{
+    const handleIncrement = () => {
         if (mintAmount >= 3) return;
         setMintAmount(mintAmount + 1)
     }
 
     return (
-        <div>
-            <h1>RoboPunks</h1>
-            <p>It is 2078, Can thr ROboPunks NFT save humans from destruction rampant NFT speculation? Mint RoboPunks to find out. </p>
-            {isConnected ? (
-                <div>
-                    <div>
-                        <button onClick={handleDecrement}>-</button>
-                        <input typeof="number" value={mintAmount}></input>
-                        <button onClick={handleIncrement}>+</button>
+        <Flex justify="center" align="center" height="100vh" paddingBottom="150px">
+            <Box width="520px">
+                <Text fontSize="48px" textShadow="0 5px #000000">
+                    RoboPunks
+                </Text>
 
+                <Text fontSize="30px" letterSpacing="-5.5%" fontFamily="VT323" textShadow="0 2px 2px #000000">
+                    It is 2078, Can thr ROboPunks NFT save humans from destruction rampant NFT speculation? Mint RoboPunks to find out.
+                </Text>
+                {isConnected ? (
+                    <div>
+                        <Flex justify="center" align="center">
+                            <Button
+                                backgroundColor="#D6517D"
+                                borderRadius="5px"
+                                boxShadow="0px 2px 2px 1px #0F0F0F"
+                                color="white"
+                                cursor="pointer"
+                                fontFamily="inherit"
+                                padding="15px"
+                                marginTop="10px"
+                                onClick={handleDecrement}
+                            >
+                                -
+                            </Button>
+                            <Input
+                                readOnly
+                                fontFamily="inherit"
+                                width="100px"
+                                height="40px"
+                                textAlign="center"
+                                paddingLeft="19px"
+                                marginTop="10px"
+                                type="number"
+                                value={mintAmount}
+                            />
+                            <Button
+                                backgroundColor="#D6517D"
+                                borderRadius="5px"
+                                boxShadow="0px 2px 2px 1px #0F0F0F"
+                                color="white"
+                                cursor="pointer"
+                                fontFamily="inherit"
+                                padding="15px"
+                                marginTop="10px"
+                                onClick={handleIncrement}
+                            >
+                                +
+                            </Button>
+                        </Flex>
+                        <Button
+                            backgroundColor="#D6517D"
+                            borderRadius="5px"
+                            boxShadow="0px 2px 2px 1px #0F0F0F"
+                            color="white"
+                            cursor="pointer"
+                            fontFamily="inherit"
+                            padding="15px"
+                            marginTop="10px"
+                            onClick={handleMint}
+                        >
+                            Mint Now
+                        </Button>
                     </div>
-                    <button onClick={handleMint} >Mint Now</button>
-                </div>
-            ) : (
-                <div>
-                    <p>You must be connected to Mint</p>
-                </div>
-            )}
-        </div>
+                ) : (
+                    <Text
+                        marginTop="70px"
+                        fontSize="30px"
+                        letterSpacing="-5.5%"
+                        fontFamily="VT323"
+                        textShadow="0 3px #000000"
+                        color="#D6517D"
+                    >
+                        You must be connected to Mint.
+                    </Text>
+                )}
+            </Box>
+
+        </Flex>
     );
 }
 
